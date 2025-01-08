@@ -11,7 +11,10 @@
         "billing_address": {
             "properties": {
                 "id": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "zip": {
                     "type": [
@@ -139,7 +142,10 @@
         "customer": {
             "properties": {
                 "id": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "note": {
                     "type": [
@@ -196,7 +202,10 @@
                     ]
                 },
                 "orders_count": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "accepts_marketing": {
                     "type": "boolean"
@@ -221,42 +230,47 @@
         },
         "discount_codes": {
             "items": {
-                "anyOf": [
-                    {
-                        "type": "object",
+                "type": "object",
+                "properties": {
+                    "discount_code": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
                         "properties": {
-                            "discount_code": {
-                                "type": "object",
-                                "properties": {
-                                    "id": {
-                                        "type": "integer"
-                                    },
-                                    "code": {
-                                        "type": [
-                                            "string",
-                                            "null"
-                                        ]
-                                    },
-                                    "created_at": {
-                                        "type": [
-                                            "string",
-                                            "null"
-                                        ]
-                                    },
-                                    "updated_at": {
-                                        "type": [
-                                            "string",
-                                            "null"
-                                        ]
-                                    },
-                                    "usage_count": {
-                                        "type": "integer"
-                                    }
-                                }
+                            "id": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "created_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "updated_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "usage_count": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
                             }
                         }
                     }
-                ]
+                }
             },
             "type": "array"
         },
@@ -273,7 +287,10 @@
             ]
         },
         "id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "landing_site": {
             "type": [
@@ -283,6 +300,7 @@
         },
         "line_items": {
             "items": {
+                "type": "object",
                 "properties": {
                     "sku": {
                         "type": [
@@ -291,7 +309,10 @@
                         ]
                     },
                     "grams": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "price": {
                         "type": [
@@ -312,13 +333,22 @@
                         ]
                     },
                     "quantity": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "product_id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "variant_id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "variant_title": {
                         "type": [
@@ -362,8 +392,8 @@
                 }
             },
             "type": [
-                "null",
-                "string"
+                "string",
+                "null"
             ]
         },
         "presentment_currency": {
@@ -485,6 +515,7 @@
         },
         "shipping_lines": {
             "items": {
+                "type": "object",
                 "properties": {
                     "code": {
                         "type": [
@@ -528,9 +559,13 @@
         },
         "tax_lines": {
             "items": {
+                "type": "object",
                 "properties": {
                     "rate": {
-                        "type": "number"
+                        "type": [
+                            "number",
+                            "null"
+                        ]
                     },
                     "price": {
                         "type": [
@@ -545,10 +580,7 @@
                         ]
                     },
                     "channel_liable": {
-                        "type": [
-                            "boolean",
-                            "null"
-                        ]
+                        "type": "boolean"
                     }
                 }
             },
@@ -594,7 +626,10 @@
             ]
         },
         "total_weight": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "updated_at": {
             "type": [

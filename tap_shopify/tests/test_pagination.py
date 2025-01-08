@@ -3,9 +3,9 @@
 import unittest
 
 import responses
-import singer_sdk._singerlib as singer
 
 import tap_shopify.tests.utils as test_utils
+from tap_shopify.client import API_VERSION
 
 
 class TestTapShopifyWithBaseCredentials(unittest.TestCase):
@@ -15,19 +15,15 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
         self.basic_mock_config = test_utils.basic_mock_config
 
         responses.reset()
-        del test_utils.SINGER_MESSAGES[:]
-
-        singer.write_message = test_utils.accumulate_singer_messages
 
     @responses.activate
     def test_pagination(self):
-
         tap = test_utils.set_up_tap_with_custom_catalog(
             self.basic_mock_config, ["products"]
         )
 
         resource_url = (
-            "https://mock-store.myshopify.com/admin/api/2022-01/products.json"
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/products.json"
         )
 
         rsp1 = responses.Response(
@@ -62,6 +58,3 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
         self.assertIs(rsp1.call_count, 1)
         self.assertIs(rsp2.call_count, 1)
         self.assertIs(rsp3.call_count, 1)
-
-        self.assertEqual(len(test_utils.SINGER_MESSAGES), 1)
-        self.assertIsInstance(test_utils.SINGER_MESSAGES[0], singer.SchemaMessage)

@@ -10,6 +10,7 @@ from singer_sdk.streams import RESTStream
 from tap_shopify.auth import tap_shopifyAuthenticator
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
+API_VERSION = "2023-10"
 
 
 class tap_shopifyStream(RESTStream):
@@ -20,8 +21,9 @@ class tap_shopifyStream(RESTStream):
         """Return the API URL root, configurable via tap settings."""
         url_base = self.config.get(
             "admin_url"
-        ) or "https://%s.myshopify.com/admin" % self.config.get("store")
-        return url_base
+        ) or "https://{store}.myshopify.com/admin".format(store=self.config["store"])
+
+        return f"{url_base}/api/{API_VERSION}"
 
     records_jsonpath = "$[*]"  # Or override `parse_response`.
     next_page_token_jsonpath = "$.next_page"  # Or override `get_next_page_token`.
@@ -72,21 +74,27 @@ class tap_shopifyStream(RESTStream):
 
         if last_updated:
             params["updated_at_min"] = last_updated
-            return params
         elif start_date:
             params["created_at_min"] = start_date
+
         return params
 
     def post_process(self, row: dict, context: Optional[dict] = None):
         """Deduplicate rows by id or updated_at."""
-        current_row_id = row.get("id")
+        if not self.replication_key:
+            return row
 
-        updated_at = row.get("updated_at")
+        row_id = row.get("id")
+        row_updated_at = row.get(self.replication_key)
 
-        if (current_row_id and current_row_id == self.last_id) or (
-            updated_at == self.get_starting_replication_key_value(context)
+        if not row_id or not row_updated_at:
+            return row
+
+        if (
+            row_id == self.last_id
+            or row_updated_at == self.get_starting_replication_key_value(context)
         ):
             return None
 
-        self.last_id = current_row_id
+        self.last_id = row_id
         return row
